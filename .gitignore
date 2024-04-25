@@ -1,0 +1,4 @@
+*.onnx
+*.pth
+/sam-be/output/*
+/sam-be/uploads/*
