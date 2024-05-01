@@ -166,7 +166,7 @@ const App = () => {
     initModel();
   }, []);
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: any) => {
     setSelectedFile(event.target.files[0]);
   };
 
@@ -199,7 +199,7 @@ const App = () => {
     }
   };
 
-  const loadImage = async (url) => {
+  const loadImage = async (url: URL) => {
     try {
       const img = new Image();
       img.src = url.href;
@@ -219,7 +219,7 @@ const App = () => {
     }
   };
 
-  const loadNpyTensor = async (tensorFile, dType) => {
+  const loadNpyTensor = async (tensorFile: string, dType: string) => {
     let npLoader = new npyjs();
     try {
       const npArray = await npLoader.load(tensorFile);
@@ -237,18 +237,34 @@ const App = () => {
   }, [clicks, model, tensor, modelScale]);
 
   const runONNX = async () => {
-    try {
-      const feeds = {
-        clicks,
-        tensor,
-        modelScale,
-      };
-      const results = await model.run(feeds);
-      const output = results[model.outputNames[0]];
-      setMaskImg(onnxMaskToImage(output.data, output.dims[2], output.dims[3]));
-    } catch (e) {
-      console.log("Error running ONNX model:", e);
-    }
+        try {
+          if (
+            model === null ||
+            clicks === null ||
+            tensor === null ||
+            modelScale === null
+          )
+            return;
+          else {
+            // Preapre the model input in the correct format for SAM. 
+            // The modelData function is from onnxModelAPI.tsx.
+            const feeds = modelData({
+              clicks,
+              tensor,
+              modelScale,
+            });
+            if (feeds === undefined) return;
+            // Run the SAM ONNX model with the feeds returned from modelData()
+            const results = await model.run(feeds);
+            const output = results[model.outputNames[0]];
+            // The predicted mask returned from the ONNX model is an array which is 
+            // rendered as an HTML image using onnxMaskToImage() from maskUtils.tsx.
+            setMaskImg(onnxMaskToImage(output.data, output.dims[2], output.dims[3]));
+          }
+        } catch (e) {
+          console.log(e);
+        }
+
   };
 
   return (
