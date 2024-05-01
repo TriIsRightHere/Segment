@@ -134,6 +134,8 @@ import { onnxMaskToImage } from "./components/helpers/maskUtils";
 import { modelData } from "./components/helpers/onnxModelAPI";
 import Stage from "./components/Stage";
 import AppContext from "./components/hooks/createContext";
+import ImageSegmenter from "./components/ImageSegmenter";
+import { createConnection } from "net";
 const ort = require("onnxruntime-web");
 
 // Define image, embedding and model paths
@@ -150,6 +152,7 @@ const App = () => {
   const [tensor, setTensor] = useState<Tensor | null>(null);
   const [modelScale, setModelScale] = useState<modelScaleProps | null>(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imageSrc, setImageSrc] = useState("");
 
   useEffect(() => {
     // Initialize the ONNX model
@@ -166,8 +169,16 @@ const App = () => {
     initModel();
   }, []);
 
+  // const handleFileChange = (event: any) => {
+  //   setSelectedFile(event.target.files[0]);
+  // };
   const handleFileChange = (event: any) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const objectURL = URL.createObjectURL(file);
+      setImageSrc(objectURL);
+    }
   };
 
   const handleUpload = async () => {
@@ -229,7 +240,8 @@ const App = () => {
       console.error("Error loading .npy file:", error);
     }
   };
-
+  
+  
   useEffect(() => {
     if (model && tensor && modelScale && clicks !== undefined) {
       runONNX();
@@ -268,12 +280,30 @@ const App = () => {
   };
 
   return (
+    // <div>
+    //   <input type="file" onChange={handleFileChange} accept="image/*" />
+    //   <button onClick={handleUpload}>Upload Image</button>
+    //   <Stage />
+    // </div>
     <div>
       <input type="file" onChange={handleFileChange} accept="image/*" />
       <button onClick={handleUpload}>Upload Image</button>
+      {selectedFile && model && tensor && modelScale && (
+        <ImageSegmenter
+          imageSrc={imageSrc}
+          model={model}
+          tensor={tensor}
+          modelScale={modelScale}
+          clicks={clicks || []}
+        />
+      )}
       <Stage />
     </div>
   );
 };
 
 export default App;
+
+
+
+
