@@ -7,7 +7,7 @@ import subprocess
 app = Flask(__name__)
 UPLOAD_FOLDER = './uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+cors = CORS(app, resources={r"*": {"origins": "http://localhost:8080"}})
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
