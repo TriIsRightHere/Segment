@@ -18,6 +18,7 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist/",
     "sourceMap": true
+
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src"],
   "exclude": ["node_modules"]
