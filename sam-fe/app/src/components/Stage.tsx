@@ -27,16 +27,35 @@ const Stage = () => {
     x *= imageScale;
     y *= imageScale;
     const click = getClick(x, y);
+    //console.log(click);
     if (click) setClicks([click]);
   }, 15);
 
+  const handleClick = _.throttle((e: any) => {
+    let el = e.target;
+    const rect = el.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    const imageScale = image ? image.width / el.offsetWidth : 1;
+    x *= imageScale;
+    y *= imageScale;
+
+    const click = getClick(x, y);
+    setClicks([click]); 
+    console.log(click)
+  },100);
+
+ 
+
   const flexCenterClasses = "flex items-center justify-center";
   return (
-    <div className={`${flexCenterClasses} w-full h-full`}>
-      <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
-        <Tool handleMouseMove={handleMouseMove} />
-      </div>
-    </div>
+
+    <div className={`${flexCenterClasses} w-full h-full`} onClick={handleClick} style={{ cursor: 'pointer' }}>
+  <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
+    <Tool handleMouseMove={handleMouseMove} handleClick={handleClick} />
+  </div>
+</div>
+
   );
 };
 

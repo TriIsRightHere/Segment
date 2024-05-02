@@ -3,7 +3,7 @@ import AppContext from "./hooks/createContext";
 import { ToolProps } from "./helpers/Interfaces";
 import * as _ from "underscore";
 
-const Tool = ({ handleMouseMove }: ToolProps) => {
+const Tool = ({ handleMouseMove, handleClick }: ToolProps) => {
   const {
     image: [image],
     maskImg: [maskImg, setMaskImg],
@@ -44,8 +44,9 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
       {image && (
         <img
           onMouseMove={handleMouseMove}
-          onMouseOut={() => _.defer(() => setMaskImg(null))}
-          onTouchStart={handleMouseMove}
+          // onMouseOut={() => _.defer(() => setMaskImg(null))}
+          // onTouchStart={handleMouseMove}
+          onClick={handleClick}
           src={image.src}
           className={`${
             shouldFitToWidth ? "w-full" : "h-full"
@@ -55,6 +56,8 @@ const Tool = ({ handleMouseMove }: ToolProps) => {
       {maskImg && (
         <img
           src={maskImg.src}
+          onClick={() => console.log(maskImg)}
+          onMouseOver={() => console.log(maskImg)}
           className={`${
             shouldFitToWidth ? "w-full" : "h-full"
           } ${maskImageClasses}`}
