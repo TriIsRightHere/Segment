@@ -10,7 +10,7 @@ const Stage = () => {
     image: [image],
   } = useContext(AppContext)!;
 
-  const getClick = (x: number, y: number): modelInputProps => {
+  const getClicks = (x: number, y: number): modelInputProps => {
     const clickType = 1;
     return { x, y, clickType };
   };
@@ -26,7 +26,7 @@ const Stage = () => {
     const imageScale = image ? image.width / el.offsetWidth : 1;
     x *= imageScale;
     y *= imageScale;
-    const click = getClick(x, y);
+    const click = getClicks(x, y);
     //console.log(click);
     if (click) setClicks([click]);
   }, 15);
@@ -40,9 +40,9 @@ const Stage = () => {
     x *= imageScale;
     y *= imageScale;
 
-    const click = getClick(x, y);
-    setClicks([click]); 
-    console.log(click)
+    const clicks = getClicks(x, y);
+    setClicks([clicks]); 
+    console.log(clicks)
   },100);
 
  

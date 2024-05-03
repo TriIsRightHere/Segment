@@ -1,4 +1,4 @@
-import { Tensor } from "onnxruntime-web";
+import { OnnxValue, Tensor } from "onnxruntime-web";
 import { modeDataProps } from "./Interfaces";
 
 const modelData = ({ clicks, tensor, modelScale }: modeDataProps) => {

@@ -157,7 +157,10 @@ const App = () => {
         }
 
   };
-
+  const handleCutout = (cutout: any) => {
+    // Handle cutout data
+    console.log('Cutout data:', cutout);
+  };
   return (
 
     <div>
@@ -171,9 +174,9 @@ const App = () => {
       tensor={tensor}
       modelScale={modelScale}
       clicks={clicks || []}
+      onCutout={handleCutout}
     />
   )}
-  
     </div>
   );
 };
