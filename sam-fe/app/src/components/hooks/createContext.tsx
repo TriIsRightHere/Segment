@@ -1,10 +1,14 @@
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext } from "react";
 import { modelInputProps } from "../helpers/Interfaces";
 
 interface contextProps {
+  // clicks: [
+  //   clicks: modelInputProps[] | null,
+  //   setClicks: (e: modelInputProps[] | null) => void
+  // ];
   clicks: [
-    clicks: modelInputProps[] | null,
-    setClicks: (e: modelInputProps[] | null) => void
+    clicks: modelInputProps[],
+    setClicks: Dispatch<SetStateAction<modelInputProps[]>>
   ];
   image: [
     image: HTMLImageElement | null,
@@ -16,6 +20,12 @@ interface contextProps {
   ];
 }
 
-const AppContext = createContext<contextProps | null>(null);
+const defaultState: contextProps = {
+  clicks: [[], () => {}],  // Add Clicks prop
+  image: [null, () => {}],
+  maskImg: [null, () => {}]
+};
+// const AppContext = createContext<contextProps | null>(null);
+const AppContext = createContext<contextProps>(defaultState);
 
 export default AppContext;

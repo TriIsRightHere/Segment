@@ -1,10 +1,10 @@
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Tensor, InferenceSession } from 'onnxruntime-web';
 import { onnxMaskToImage } from './helpers/maskUtils';
 import { modelData } from './helpers/onnxModelAPI';
-
+import AppContext from './hooks/createContext';
 interface ImageSegmenterProps {
   imageSrc: string;
   model: InferenceSession;
@@ -14,7 +14,7 @@ interface ImageSegmenterProps {
     width: number;
     samScale: number;
   };
-  clicks: Array<{ x: number; y: number; clickType: number; }>;
+  //clicks: Array<{ x: number; y: number; clickType: number; }>;
   onCutout: (cutout: any) => void; // Define the function signature for returning cutout
 }
 
@@ -23,17 +23,19 @@ const ImageSegmenter = ({
   model,
   tensor,
   modelScale,
-  clicks,
+  //clicks:[clicks],
   onCutout,
 }: ImageSegmenterProps) => {
   const [segmentedImage, setSegmentedImage] = useState<string | null>(null);
-
+  const {clicks: [clicks]} = useContext(AppContext)
+  
+  
   useEffect(() => {
+    console.log("Clicks received: ", clicks)
     const loadImageAndRunModel = async () => {
       if (imageSrc && model && tensor) {
         const image = new Image();
         image.src = imageSrc;
-
         image.onload = async () => {
           try {
             const inputs = modelData({
@@ -41,6 +43,10 @@ const ImageSegmenter = ({
               tensor,
               modelScale
             });
+            if (!inputs){
+              console.error("No inputs invalid");
+              return;
+            }
             console.log("inputs: ",inputs)
             const results = await model.run(inputs);
             if (results && results.masks && results.masks.data) {
@@ -71,9 +77,9 @@ const ImageSegmenter = ({
     canvas.width = originalImage.width;
     canvas.height = originalImage.height;
 
-    ctx.drawImage(maskImage, 0, 0);
-    ctx.globalCompositeOperation = 'source-in';
-    ctx.drawImage(originalImage, 0, 0);
+    // ctx.drawImage(maskImage, 0, 0);
+    // ctx.globalCompositeOperation = 'source-in';
+    // ctx.drawImage(originalImage, 0, 0);
 
     return canvas.toDataURL();
   };
@@ -85,7 +91,6 @@ const ImageSegmenter = ({
         <img src={segmentedImage} alt="Segmented Image" style={{ width: '100%', display: 'block' }} />
       )}
     </div>
-    
   );
 };
 

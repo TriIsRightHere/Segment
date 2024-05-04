@@ -42,20 +42,18 @@ const Stage = () => {
 
     const clicks = getClicks(x, y);
     setClicks([clicks]); 
-    console.log(clicks)
+    console.log(clicks);
   },100);
 
- 
+
 
   const flexCenterClasses = "flex items-center justify-center";
   return (
-
-    <div className={`${flexCenterClasses} w-full h-full`} onClick={handleClick} style={{ cursor: 'pointer' }}>
-  <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
-    <Tool handleMouseMove={handleMouseMove} handleClick={handleClick} />
+  <div className={`${flexCenterClasses} w-full h-full`} onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
+      <Tool handleMouseMove={handleMouseMove} handleClick={handleClick}/>
+    </div>
   </div>
-</div>
-
   );
 };
 
